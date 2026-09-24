@@ -1,9 +1,14 @@
 package com.marz.soporte.marz_soporte.service;
 
+import com.marz.soporte.marz_soporte.dto.SolicitudDTO;
 import com.marz.soporte.marz_soporte.entity.Solicitud;
 import com.marz.soporte.marz_soporte.entity.Usuario;
+import com.marz.soporte.marz_soporte.repository.SolicitudRepository;
+import com.marz.soporte.marz_soporte.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class SolicitudService {

@@ -46,8 +46,18 @@ public class SecurityConfig {
                         .requestMatchers("/api/auditor/**").hasRole("AUDITOR")
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults())
+        .logout(logout -> logout
+                .logoutUrl("/api/auth/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.setStatus(200);
+                    response.getWriter().write("Sesion cerrada correctamente");
+                })
+        );
 
         return http.build();
+
     }
 }
