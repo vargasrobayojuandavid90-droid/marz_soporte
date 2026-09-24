@@ -25,7 +25,7 @@ public class Solicitudes {
 
     private LocalDateTime fechaCreacion;
     private LocalDateTime ultimaActualizacion;
-    private String estado; // "Nuevo", "En Proceso", etc.
+    private String estado;
     private String prioridad;
 
     @ManyToOne
