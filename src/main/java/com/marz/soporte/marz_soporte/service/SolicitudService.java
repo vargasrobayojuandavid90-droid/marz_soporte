@@ -29,8 +29,7 @@ public class SolicitudService {
         solicitud.setDescripcion(dto.getDescripcion());
         solicitud.setCategoria(dto.getCategoria());
         solicitud.setFechaCreacion(LocalDateTime.now());
-        solicitud.setUltimaActualizacion(LocalDateTime.now());
-        solicitud.setEstado("Nuevo"); // Estado predeterminado
+        solicitud.setEstado("Nuevo");
         solicitud.setSolicitante(solicitante);
 
         return solicitudRepository.save(solicitud);

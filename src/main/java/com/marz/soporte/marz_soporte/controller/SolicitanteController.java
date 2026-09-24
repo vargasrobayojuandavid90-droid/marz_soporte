@@ -1,6 +1,5 @@
 package com.marz.soporte.marz_soporte.controller;
 
-import com.marz.soporte.marz_soporte.dto.SolicitudDTO;
 import com.marz.soporte.marz_soporte.entity.Solicitud;
 import com.marz.soporte.marz_soporte.entity.Usuario;
 import com.marz.soporte.marz_soporte.repository.SolicitudRepository;
@@ -11,46 +10,57 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/solicitante")
 public class SolicitanteController {
-    @Autowired private SolicitudRepository solicitudRepository;
-    @Autowired private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private SolicitudRepository solicitudRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    // HU02: Crear una nueva solicitud de soporte
     @PostMapping("/solicitudes")
-    public ResponseEntity<?> crearSolicitud(@RequestBody SolicitudDTO dto, Authentication authentication) {
-        if (dto.getTitulo() == null || dto.getDescripcion() == null || dto.getCategoria() == null) {
-            return ResponseEntity.badRequest().body("Título, descripción y categoría son obligatorios.");
+    public ResponseEntity<?> crearSolicitud(@RequestBody Map<String, String> datos, Authentication authentication) {
+        String emailUsuario = authentication.getName();
+        Usuario solicitante = usuarioRepository.findByEmail(emailUsuario).orElse(null);
+
+        if (solicitante == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("mensaje", "Usuario no autenticado."));
         }
 
-        Usuario solicitante = usuarioRepository.findByEmail(authentication.getName()).orElseThrow();
+        String titulo = datos.get("titulo");
+        String descripcion = datos.get("descripcion");
+        String categoria = datos.get("categoria");
 
-        Solicitud solicitud = new Solicitud();
-        solicitud.setTitulo(dto.getTitulo());
-        solicitud.setDescripcion(dto.getDescripcion());
-        solicitud.setCategoria(dto.getCategoria());
-        solicitud.setFechaCreacion(LocalDateTime.now());
-        solicitud.setUltimaActualizacion(LocalDateTime.now());
-        solicitud.setEstado("Nuevo");
-        solicitud.setPrioridad("Media");
-        solicitud.setSolicitante(solicitante);
+        if (titulo == null || descripcion == null || categoria == null) {
+            return ResponseEntity.badRequest().body(Map.of("mensaje", "Título, descripción y categoría son requeridos."));
+        }
 
-        Solicitud guardada = solicitudRepository.save(solicitud);
-        return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
+        Solicitud nuevaSolicitud = new Solicitud(titulo, descripcion, categoria, solicitante);
+        solicitudRepository.save(nuevaSolicitud);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                "mensaje", "Solicitud creada exitosamente.",
+                "id", nuevaSolicitud.getId()
+        ));
     }
 
+    // HU03: Consultar las solicitudes propias del usuario
     @GetMapping("/solicitudes")
-    public List<Solicitud> listarMisSolicitudes(Authentication authentication) {
-        return solicitudRepository.findBySolicitanteEmail(authentication.getName());
-    }
+    public ResponseEntity<?> obtenerMisSolicitudes(Authentication authentication) {
+        String emailUsuario = authentication.getName();
+        Usuario solicitante = usuarioRepository.findByEmail(emailUsuario).orElse(null);
 
-    @GetMapping("/solicitudes/{id}")
-    public ResponseEntity<Solicitud> obtenerDetalle(@PathVariable Long id, Authentication authentication) {
-        return solicitudRepository.findByIdAndSolicitanteEmail(id, authentication.getName())
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+        if (solicitante == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("mensaje", "Usuario no autenticado."));
+        }
+
+        List<Solicitud> misSolicitudes = solicitudRepository.findBySolicitante(solicitante);
+        return ResponseEntity.ok(misSolicitudes);
     }
 }
