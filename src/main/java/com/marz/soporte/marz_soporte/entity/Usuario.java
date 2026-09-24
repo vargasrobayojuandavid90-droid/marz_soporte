@@ -1,14 +1,17 @@
 package com.marz.soporte.marz_soporte.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import javax.management.relation.Role;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "usuario")
+@Table(name = "usuarios")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +23,13 @@ public class Usuario {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role rol;
+    @Column(nullable = false)
+    private Role rol; // Ahora tomará automáticamente el enum Role de este mismo paquete
 
+    // Constructor personalizado sin ID para facilitar la creación de nuevos usuarios
+    public Usuario(String email, String password, Role rol) {
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+    }
 }

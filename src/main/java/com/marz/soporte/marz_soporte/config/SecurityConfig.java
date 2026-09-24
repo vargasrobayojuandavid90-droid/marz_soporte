@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .map(u -> User.builder()
                         .username(u.getEmail())
                         .password(u.getPassword())
-                        .roles(u.getRol().getRoleName())
+                        .roles(u.getRol().name()) // ✅ CAMBIO AQUÍ: Usar .name() en lugar de .getRoleName()
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Credenciales inválidas"));
     }
@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())) // Para H2 Console
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/api/auth/registro").permitAll()
                         .requestMatchers("/api/solicitante/**").hasRole("SOLICITANTE")
                         .requestMatchers("/api/coordinador/**").hasRole("COORDINADOR")
                         .requestMatchers("/api/agente/**").hasRole("AGENTE")

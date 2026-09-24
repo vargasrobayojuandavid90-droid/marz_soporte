@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HU01 - Autenticación y Registro MAR-Z</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #edf2f7;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+            color: #a0aec0;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #3182ce;
+            border-bottom-color: #3182ce;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #4a5568;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            background-color: white;
+        }
+
+        input:focus, select:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+        }
+
+        button.btn-submit {
+            width: 100%;
+            padding: 11px;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        button.btn-submit:hover {
+            background-color: #2b6cb0;
+        }
+
+        .btn-logout {
+            background-color: #e53e3e;
+            margin-top: 15px;
+            width: 100%;
+            padding: 11px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: #c53030;
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        .alert-error {
+            background-color: #fed7d7;
+            color: #9b2c2c;
+        }
+
+        .alert-success {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+
+        .user-panel {
+            display: none;
+        }
+
+        .info-card {
+            background-color: #edf2f7;
+            border-left: 4px solid #3182ce;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            background-color: #2b6cb0;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .views-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .views-list li {
+            padding: 8px;
+            background-color: #f7fafc;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 6px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="auth-section">
+        <!-- PESTAÑAS LOGIN / REGISTRO -->
+        <div class="tabs">
+            <button id="tab-login" class="tab-btn active" onclick="cambiarTab('login')">Ingresar</button>
+            <button id="tab-register" class="tab-btn" onclick="cambiarTab('register')">Registrarse</button>
+        </div>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- FORMULARIO LOGIN -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Correo Electrónico</label>
+                <input type="email" id="login-email" placeholder="correo@test.com" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit">Iniciar Sesión</button>
+        </form>
+
+        <!-- FORMULARIO REGISTRO -->
+        <form id="register-form" style="display: none;">
+            <div class="form-group">
+                <label for="reg-email">Correo Electrónico</label>
+                <input type="email" id="reg-email" placeholder="nuevo@test.com" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Contraseña</label>
+                <input type="password" id="reg-password" placeholder="••••••••" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-role">Seleccionar Rol</label>
+                <select id="reg-role" required>
+                    <option value="SOLICITANTE">Solicitante</option>
+                    <option value="AGENTE">Agente</option>
+                    <option value="COORDINADOR">Coordinador</option>
+                    <option value="AUDITOR">Auditor</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit">Crear Cuenta</button>
+        </form>
+    </div>
+
+    <!-- PANEL DE USUARIO AUTENTICADO -->
+    <div id="user-panel" class="user-panel">
+        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 15px;">Panel de Control</h2>
+
+        <div class="info-card">
+            <p><strong>Usuario:</strong> <span id="user-email"></span></p>
+            <p style="margin-top: 5px;"><strong>Rol Asignado:</strong> <span id="user-role" class="role-badge"></span></p>
+        </div>
+
+        <p style="font-size: 14px; font-weight: bold; color: #4a5568;">Funciones habilitadas:</p>
+        <ul id="functions-list" class="views-list"></ul>
+
+        <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
+    </div>
+</div>
+
+<script>
+    const alertBox = document.getElementById('alert-box');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const authSection = document.getElementById('auth-section');
+    const userPanel = document.getElementById('user-panel');
+
+    const funcionesPorRol = {
+        'SOLICITANTE': ['Crear Solicitudes de Soporte (HU02)', 'Consultar Mis Solicitudes (HU03)'],
+        'COORDINADOR': ['Priorizar y Ordenar Solicitudes (HU04)', 'Asignar Agentes a Solicitudes'],
+        'AGENTE': ['Atender Solicitudes Asignadas', 'Registrar Avances de Soporte'],
+        'AUDITOR': ['Consultar Historial de Cambios (Modo Lectura)']
+    };
+
+    function cambiarTab(tipo) {
+        ocultarAlerta();
+        if (tipo === 'login') {
+            document.getElementById('tab-login').classList.add('active');
+            document.getElementById('tab-register').classList.remove('active');
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+        } else {
+            document.getElementById('tab-register').classList.add('active');
+            document.getElementById('tab-login').classList.remove('active');
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        }
+    }
+
+    function mostrarAlerta(mensaje, esError = true) {
+        alertBox.textContent = mensaje;
+        alertBox.className = `alert ${esError ? 'alert-error' : 'alert-success'}`;
+        alertBox.style.display = 'block';
+    }
+
+    function ocultarAlerta() {
+        alertBox.style.display = 'none';
+    }
+
+    // REGISTRO DE USUARIO
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        ocultarAlerta();
+
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const rol = document.getElementById('reg-role').value;
+
+        try {
+            const response = await fetch('/api/auth/registro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, rol })
+            });
+
+            const data = await response.text();
+
+            if (response.ok) {
+                mostrarAlerta('¡Registro exitoso! Ahora puedes iniciar sesión.', false);
+                registerForm.reset();
+                setTimeout(() => cambiarTab('login'), 1500);
+            } else {
+                mostrarAlerta(data, true);
+            }
+        } catch (error) {
+            mostrarAlerta('Error de conexión al registrar.', true);
+        }
+    });
+
+    // INICIO DE SESIÓN
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        ocultarAlerta();
+
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        const credentials = btoa(`${email}:${password}`);
+
+        try {
+            const response = await fetch('/api/auth/me', {
+                method: 'GET',
+                headers: { 'Authorization': `Basic ${credentials}` }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                sessionStorage.setItem('authHeader', `Basic ${credentials}`);
+                mostrarPanel(data.email, data.rol);
+            } else {
+                mostrarAlerta('Credenciales inválidas. Verifique sus datos.', true);
+            }
+        } catch (error) {
+            mostrarAlerta('Error al conectar con el servidor.', true);
+        }
+    });
+
+    function mostrarPanel(email, rol) {
+        authSection.style.display = 'none';
+        userPanel.style.display = 'block';
+
+        document.getElementById('user-email').textContent = email;
+        document.getElementById('user-role').textContent = rol;
+
+        const list = document.getElementById('functions-list');
+        list.innerHTML = '';
+        (funcionesPorRol[rol] || []).forEach(f => {
+            const li = document.createElement('li');
+            li.textContent = `• ${f}`;
+            list.appendChild(li);
+        });
+    }
+
+    // CERRAR SESIÓN
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+        try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (e) {}
+        sessionStorage.removeItem('authHeader');
+        loginForm.reset();
+        userPanel.style.display = 'none';
+        authSection.style.display = 'block';
+        cambiarTab('login');
+    });
+</script>
+
+</body>
+</html>
