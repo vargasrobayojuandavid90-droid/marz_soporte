@@ -3,176 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HU01 - Autenticación y Registro MAR-Z</title>
+    <title>Plataforma de Soporte MAR-Z</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f4f6f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 420px;
-            padding: 30px;
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #edf2f7;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            background: none;
-            border: none;
-            font-size: 15px;
-            font-weight: bold;
-            color: #a0aec0;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-        }
-
-        .tab-btn.active {
-            color: #3182ce;
-            border-bottom-color: #3182ce;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #4a5568;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            font-size: 14px;
-            outline: none;
-            background-color: white;
-        }
-
-        input:focus, select:focus {
-            border-color: #3182ce;
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
-        }
-
-        button.btn-submit {
-            width: 100%;
-            padding: 11px;
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-
-        button.btn-submit:hover {
-            background-color: #2b6cb0;
-        }
-
-        .btn-logout {
-            background-color: #e53e3e;
-            margin-top: 15px;
-            width: 100%;
-            padding: 11px;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-logout:hover {
-            background-color: #c53030;
-        }
-
-        .alert {
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 13px;
-            margin-bottom: 15px;
-            display: none;
-            text-align: center;
-        }
-
-        .alert-error {
-            background-color: #fed7d7;
-            color: #9b2c2c;
-        }
-
-        .alert-success {
-            background-color: #c6f6d5;
-            color: #22543d;
-        }
-
-        .user-panel {
-            display: none;
-        }
-
-        .info-card {
-            background-color: #edf2f7;
-            border-left: 4px solid #3182ce;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-
-        .role-badge {
-            display: inline-block;
-            background-color: #2b6cb0;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .views-list {
-            list-style: none;
-            margin-top: 10px;
-        }
-
-        .views-list li {
-            padding: 8px;
-            background-color: #f7fafc;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 6px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 100%; max-width: 600px; padding: 30px; }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #edf2f7; }
+        .tab-btn { flex: 1; padding: 10px; background: none; border: none; font-size: 15px; font-weight: bold; color: #a0aec0; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #3182ce; border-bottom-color: #3182ce; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; color: #4a5568; font-size: 14px; font-weight: 600; }
+        input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; outline: none; background-color: white; }
+        input:focus, select:focus, textarea:focus { border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2); }
+        button.btn-submit { width: 100%; padding: 11px; background-color: #3182ce; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        button.btn-submit:hover { background-color: #2b6cb0; }
+        .btn-logout { background-color: #e53e3e; margin-top: 15px; width: 100%; padding: 11px; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-logout:hover { background-color: #c53030; }
+        .alert { padding: 10px; border-radius: 6px; font-size: 13px; margin-bottom: 15px; display: none; text-align: center; }
+        .alert-error { background-color: #fed7d7; color: #9b2c2c; }
+        .alert-success { background-color: #c6f6d5; color: #22543d; }
+        .user-panel { display: none; }
+        .info-card { background-color: #edf2f7; border-left: 4px solid #3182ce; padding: 12px; border-radius: 4px; margin-bottom: 15px; }
+        .role-badge { display: inline-block; background-color: #2b6cb0; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .ticket-card { border: 1px solid #e2e8f0; padding: 12px; border-radius: 6px; margin-bottom: 10px; background: #fafafa; }
+        .ticket-title { font-weight: bold; color: #2d3748; }
+        .ticket-meta { font-size: 12px; color: #718096; margin-top: 4px; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- AUTENTICACIÓN / REGISTRO -->
     <div id="auth-section">
-        <!-- PESTAÑAS LOGIN / REGISTRO -->
         <div class="tabs">
             <button id="tab-login" class="tab-btn active" onclick="cambiarTab('login')">Ingresar</button>
             <button id="tab-register" class="tab-btn" onclick="cambiarTab('register')">Registrarse</button>
@@ -216,7 +78,7 @@
         </form>
     </div>
 
-    <!-- PANEL DE USUARIO AUTENTICADO -->
+    <!-- PANEL PRINCIPAL AUTENTICADO -->
     <div id="user-panel" class="user-panel">
         <h2 style="text-align: center; color: #2c3e50; margin-bottom: 15px;">Panel de Control</h2>
 
@@ -225,8 +87,33 @@
             <p style="margin-top: 5px;"><strong>Rol Asignado:</strong> <span id="user-role" class="role-badge"></span></p>
         </div>
 
-        <p style="font-size: 14px; font-weight: bold; color: #4a5568;">Funciones habilitadas:</p>
-        <ul id="functions-list" class="views-list"></ul>
+        <div id="panel-solicitante" style="display: none;">
+            <h3 style="margin-bottom: 10px;">Crear Nueva Solicitud (HU02)</h3>
+            <form id="form-solicitud" style="margin-bottom: 20px;">
+                <div class="form-group">
+                    <input type="text" id="sol-titulo" placeholder="Título de la solicitud" required>
+                </div>
+                <div class="form-group">
+                    <textarea id="sol-descripcion" placeholder="Descripción detallada del problema" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="sol-categoria" placeholder="Categoría (ej. Hardware, Redes, Software)" required>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Solicitud</button>
+            </form>
+
+            <h3 style="margin-bottom: 10px;">Mis Solicitudes (HU03)</h3>
+            <div id="lista-mis-solicitudes">Cargando...</div>
+        </div>
+
+        <div id="panel-coordinador" style="display: none;">
+            <h3 style="margin-bottom: 10px;">Gestión de Solicitudes (HU04)</h3>
+            <div id="lista-coordinador-solicitudes">Cargando...</div>
+        </div>
+
+        <div id="panel-generico" style="display: none;">
+            <p style="color: #718096; text-align: center;">Acceso registrado correctamente para su rol.</p>
+        </div>
 
         <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
     </div>
@@ -238,13 +125,6 @@
     const registerForm = document.getElementById('register-form');
     const authSection = document.getElementById('auth-section');
     const userPanel = document.getElementById('user-panel');
-
-    const funcionesPorRol = {
-        'SOLICITANTE': ['Crear Solicitudes de Soporte (HU02)', 'Consultar Mis Solicitudes (HU03)'],
-        'COORDINADOR': ['Priorizar y Ordenar Solicitudes (HU04)', 'Asignar Agentes a Solicitudes'],
-        'AGENTE': ['Atender Solicitudes Asignadas', 'Registrar Avances de Soporte'],
-        'AUDITOR': ['Consultar Historial de Cambios (Modo Lectura)']
-    };
 
     function cambiarTab(tipo) {
         ocultarAlerta();
@@ -267,11 +147,9 @@
         alertBox.style.display = 'block';
     }
 
-    function ocultarAlerta() {
-        alertBox.style.display = 'none';
-    }
+    function ocultarAlerta() { alertBox.style.display = 'none'; }
 
-    // REGISTRO DE USUARIO
+    // 1. CONEXIÓN REGISTRO (POST /api/auth/registro)
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         ocultarAlerta();
@@ -287,21 +165,21 @@
                 body: JSON.stringify({ email, password, rol })
             });
 
-            const data = await response.text();
+            const data = await response.json();
 
             if (response.ok) {
-                mostrarAlerta('¡Registro exitoso! Ahora puedes iniciar sesión.', false);
+                mostrarAlerta(data.mensaje || '¡Registro exitoso!', false);
                 registerForm.reset();
                 setTimeout(() => cambiarTab('login'), 1500);
             } else {
-                mostrarAlerta(data, true);
+                mostrarAlerta(data.mensaje || 'Error al registrar.', true);
             }
         } catch (error) {
-            mostrarAlerta('Error de conexión al registrar.', true);
+            mostrarAlerta('Error de conexión con el servidor.', true);
         }
     });
 
-    // INICIO DE SESIÓN
+    // 2. CONEXIÓN LOGIN Y OBTENER PERFIL (GET /api/auth/me)
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         ocultarAlerta();
@@ -328,6 +206,7 @@
         }
     });
 
+    // RENDERIZAR VISTA SEGÚN EL ROL
     function mostrarPanel(email, rol) {
         authSection.style.display = 'none';
         userPanel.style.display = 'block';
@@ -335,13 +214,136 @@
         document.getElementById('user-email').textContent = email;
         document.getElementById('user-role').textContent = rol;
 
-        const list = document.getElementById('functions-list');
-        list.innerHTML = '';
-        (funcionesPorRol[rol] || []).forEach(f => {
-            const li = document.createElement('li');
-            li.textContent = `• ${f}`;
-            list.appendChild(li);
-        });
+        document.getElementById('panel-solicitante').style.display = 'none';
+        document.getElementById('panel-coordinador').style.display = 'none';
+        document.getElementById('panel-generico').style.display = 'none';
+
+        if (rol === 'SOLICITANTE') {
+            document.getElementById('panel-solicitante').style.display = 'block';
+            cargarMisSolicitudes();
+        } else if (rol === 'COORDINADOR') {
+            document.getElementById('panel-coordinador').style.display = 'block';
+            cargarSolicitudesCoordinador();
+        } else {
+            document.getElementById('panel-generico').style.display = 'block';
+        }
+    }
+
+    // 3. CONEXIÓN HU02: CREAR SOLICITUD (POST /api/solicitante/solicitudes)
+    document.getElementById('form-solicitud').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const authHeader = sessionStorage.getItem('authHeader');
+
+        const titulo = document.getElementById('sol-titulo').value;
+        const descripcion = document.getElementById('sol-descripcion').value;
+        const categoria = document.getElementById('sol-categoria').value;
+
+        try {
+            const response = await fetch('/api/solicitante/solicitudes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authHeader
+                },
+                body: JSON.stringify({ titulo, descripcion, categoria })
+            });
+
+            if (response.ok) {
+                document.getElementById('form-solicitud').reset();
+                cargarMisSolicitudes();
+            } else {
+                alert('No se pudo crear la solicitud.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    // 4. CONEXIÓN HU03: CONSULTAR MIS SOLICITUDES (GET /api/solicitante/solicitudes)
+    async function cargarMisSolicitudes() {
+        const authHeader = sessionStorage.getItem('authHeader');
+        const cont = document.getElementById('lista-mis-solicitudes');
+
+        try {
+            const response = await fetch('/api/solicitante/solicitudes', {
+                headers: { 'Authorization': authHeader }
+            });
+
+            if (response.ok) {
+                const solicitudes = await response.json();
+                if (solicitudes.length === 0) {
+                    cont.innerHTML = '<p style="font-size:13px; color:#718096;">No tienes solicitudes registradas.</p>';
+                    return;
+                }
+
+                cont.innerHTML = solicitudes.map(s => `
+                    <div class="ticket-card">
+                        <div class="ticket-title">#${s.id} - ${s.titulo}</div>
+                        <div>${s.descripcion}</div>
+                        <div class="ticket-meta">Estado: <b>${s.estado}</b> | Prioridad: <b>${s.prioridad}</b> | Cat: ${s.categoria}</div>
+                    </div>
+                `).join('');
+            }
+        } catch (error) {
+            cont.innerHTML = 'Error al cargar solicitudes.';
+        }
+    }
+
+    // 5. CONEXIÓN HU04: CONSULTAR Y PRIORIZAR (GET /api/coordinador/solicitudes)
+    async function cargarSolicitudesCoordinador() {
+        const authHeader = sessionStorage.getItem('authHeader');
+        const cont = document.getElementById('lista-coordinador-solicitudes');
+
+        try {
+            const response = await fetch('/api/coordinador/solicitudes', {
+                headers: { 'Authorization': authHeader }
+            });
+
+            if (response.ok) {
+                const solicitudes = await response.json();
+                if (solicitudes.length === 0) {
+                    cont.innerHTML = '<p style="font-size:13px; color:#718096;">No hay solicitudes en el sistema.</p>';
+                    return;
+                }
+
+                cont.innerHTML = solicitudes.map(s => `
+                    <div class="ticket-card">
+                        <div class="ticket-title">#${s.id} - ${s.titulo}</div>
+                        <div>${s.descripcion}</div>
+                        <div class="ticket-meta">Solicitante: ${s.solicitante ? s.solicitante.email : 'N/A'}</div>
+                        <div style="margin-top:8px;">
+                            <label style="font-size:12px;">Prioridad:</label>
+                            <select onchange="cambiarPrioridad(${s.id}, this.value)" style="width:auto; padding:4px;">
+                                <option value="Baja" ${s.prioridad === 'Baja' ? 'selected' : ''}>Baja</option>
+                                <option value="Media" ${s.prioridad === 'Media' ? 'selected' : ''}>Media</option>
+                                <option value="Alta" ${s.prioridad === 'Alta' ? 'selected' : ''}>Alta</option>
+                            </select>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } catch (error) {
+            cont.innerHTML = 'Error al cargar datos de coordinación.';
+        }
+    }
+
+    // PATCH /api/coordinador/solicitudes/{id}/prioridad
+    async function cambiarPrioridad(id, nuevaPrioridad) {
+        const authHeader = sessionStorage.getItem('authHeader');
+
+        try {
+            await fetch(`/api/coordinador/solicitudes/${id}/prioridad`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authHeader
+                },
+                body: JSON.stringify({ prioridad: nuevaPrioridad })
+            });
+            cargarSolicitudesCoordinador();
+        } catch (error) {
+            alert('Error al actualizar prioridad.');
+        }
     }
 
     // CERRAR SESIÓN

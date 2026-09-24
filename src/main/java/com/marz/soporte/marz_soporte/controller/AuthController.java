@@ -42,7 +42,6 @@ public class AuthController {
         return ResponseEntity.ok(respuesta);
     }
 
-    // Endpoint para registrar nuevos usuarios con Rol específico (HU01)
     @PostMapping("/registro")
     public ResponseEntity<?> registrarUsuario(@RequestBody Map<String, String> datos) {
         String email = datos.get("email");
@@ -50,23 +49,23 @@ public class AuthController {
         String rolString = datos.get("rol");
 
         if (email == null || password == null || rolString == null) {
-            return ResponseEntity.badRequest().body("Todos los campos son obligatorios.");
+            return ResponseEntity.badRequest().body(Map.of("mensaje", "Todos los campos son obligatorios."));
         }
 
         if (usuarioRepository.findByEmail(email).isPresent()) {
-            return ResponseEntity.badRequest().body("El correo ya se encuentra registrado.");
+            return ResponseEntity.badRequest().body(Map.of("mensaje", "El correo ya se encuentra registrado."));
         }
 
         Role rol;
         try {
             rol = Role.valueOf(rolString.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Rol no válido.");
+            return ResponseEntity.badRequest().body(Map.of("mensaje", "Rol no válido."));
         }
 
         Usuario nuevoUsuario = new Usuario(email, passwordEncoder.encode(password), rol);
         usuarioRepository.save(nuevoUsuario);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado con éxito.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("mensaje", "Usuario registrado con éxito."));
     }
 }

@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .map(u -> User.builder()
                         .username(u.getEmail())
                         .password(u.getPassword())
-                        .roles(u.getRol().name()) // ✅ CAMBIO AQUÍ: Usar .name() en lugar de .getRoleName()
+                        .roles(u.getRol().name())
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Credenciales inválidas"));
     }
@@ -36,29 +36,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())) // Para H2 Console
+                .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF para simplificar las pruebas REST
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())) // Para permitir la consola H2
                 .authorizeHttpRequests(auth -> auth
+                        // 1. RECURSOS PÚBLICOS (Página principal, HTML, CSS, JS)
+                        .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/favicon.ico").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/auth/registro").permitAll()
+                        .requestMatchers("/api/auth/me").permitAll()
+
+                        // 2. RUTAS PROTEGIDAS POR ROL
                         .requestMatchers("/api/solicitante/**").hasRole("SOLICITANTE")
                         .requestMatchers("/api/coordinador/**").hasRole("COORDINADOR")
                         .requestMatchers("/api/agente/**").hasRole("AGENTE")
                         .requestMatchers("/api/auditor/**").hasRole("AUDITOR")
+
+                        // Cualquier otra petición requiere estar autenticado
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
-        .logout(logout -> logout
-                .logoutUrl("/api/auth/logout")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(200);
-                    response.getWriter().write("Sesion cerrada correctamente");
-                })
-        );
+                .httpBasic(Customizer.withDefaults()); // Mantiene HTTP Basic para peticiones de la API
 
         return http.build();
-
     }
 }
